@@ -1,13 +1,16 @@
 package com.estudos.BookStore_Jpa.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
 @Table(name = "TB_AUTHOR")
-public class  AuthorModel implements Serializable {
+public class AuthorModel implements Serializable {
 
     private static final long serialVersionUID = 1l;
 
@@ -17,6 +20,10 @@ public class  AuthorModel implements Serializable {
 
     @Column(nullable = false,  unique = true)
     private String title;
+
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @ManyToMany(mappedBy = "authors", fetch = FetchType.LAZY)
+    private Set<BookModel> books = new HashSet<>();
 
     public UUID getId() {
         return id;
@@ -32,5 +39,13 @@ public class  AuthorModel implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<BookModel> getBooks() {
+        return books;
+    }
+
+    public void setBooks(Set<BookModel> books) {
+        this.books = books;
     }
 }
